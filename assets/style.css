@@ -1,0 +1,884 @@
+/* ============================================================
+   大阪・京都 3泊4日 — 공통 스타일
+   본문 전체 Pretendard. 폰트는 이 저장소에 직접 담아 서빙하므로
+   외부 CDN 요청이 없고, 한 번 받아두면 오프라인에서도 그대로 뜬다.
+   (이 사이트에 쓰이는 글자만 남긴 서브셋 — 자세한 건 README 참고)
+   ============================================================ */
+@font-face{
+  font-family:'Pretendard';
+  src:url('fonts/Pretendard-subset.woff2') format('woff2');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  --ink:#EFE7D8;
+  --ink-dim:#9C9788;
+  --night:#11141D;
+  --night-2:#181C28;
+  --card:#1C2130;
+  --torii:#C6401F;
+  --torii-deep:#8F2A13;
+  --gold:#E3A857;
+  --line:#3A4058;
+  --paper:#F3ECDB;
+  --paper-dim:#C9C0A6;
+
+  /* 세 역할 모두 Pretendard. 뒤는 폰트가 못 뜰 때를 위한 대비책. */
+  --stack:'Pretendard','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',
+          system-ui,sans-serif,'Apple Color Emoji','Segoe UI Emoji';
+  --sans:var(--stack);
+  --serif:var(--stack);
+  --mono:var(--stack);
+
+  --bar-h:60px;
+  --pad:8vw;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:rgba(198,64,31,0.25);}
+/* 가로 넘침 차단은 html 에서. body 에 걸면 body 가 스크롤 컨테이너로
+   승격돼 스크롤 위치·position:fixed 계산이 어긋난다. */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+body{
+  background:var(--night);
+  color:var(--ink);
+  font-family:var(--sans);
+  /* 고정폭 서체를 걷어냈으므로, 시각·요금·표의 숫자는 tnum 으로 자릿수를 맞춘다 */
+  font-variant-numeric:tabular-nums;
+  width:100%;
+  padding-top:var(--bar-h);
+}
+body.menu-open{overflow:hidden;}
+::selection{background:var(--torii);color:var(--paper);}
+a:focus-visible, button:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px;}
+
+.mono{font-family:var(--mono);}
+.mincho{font-family:var(--serif);}
+
+/* ---------- background texture ---------- */
+.grain{
+  position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+  background-size:3px 3px;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--bar-h);
+  z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--pad);
+  background:rgba(17,20,29,0.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.brand{
+  display:inline-flex;align-items:center;gap:.6rem;
+  text-decoration:none;color:var(--paper);
+  transition:opacity .2s ease;
+}
+.brand:hover{opacity:.75;}
+.brand-mark{
+  width:26px;height:26px;flex:0 0 auto;
+  color:var(--torii);
+}
+.brand-text{
+  font-family:var(--serif);font-weight:700;
+  font-size:1.02rem;letter-spacing:.02em;
+  white-space:nowrap;
+}
+.brand-text i{color:var(--torii);font-style:normal;}
+.brand-sub{
+  font-family:var(--mono);
+  font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-dim);
+  padding-left:.7rem;margin-left:.2rem;
+  border-left:1px solid var(--line);
+}
+
+/* 햄버거 버튼 */
+.menu-btn{
+  -webkit-appearance:none;appearance:none;
+  background:transparent;border:1px solid var(--line);
+  border-radius:8px;
+  width:42px;height:38px;
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease;
+}
+.menu-btn:hover{border-color:var(--torii);background:rgba(198,64,31,0.1);}
+.bars{display:block;width:18px;height:12px;position:relative;}
+.bars i{
+  position:absolute;left:0;right:0;height:1.5px;
+  background:var(--paper);border-radius:2px;
+  transition:transform .28s cubic-bezier(.22,.61,.36,1), opacity .18s ease;
+}
+.bars i:nth-child(1){top:0;}
+.bars i:nth-child(2){top:5.25px;}
+.bars i:nth-child(3){top:10.5px;}
+.menu-btn[aria-expanded="true"] .bars i:nth-child(1){transform:translateY(5.25px) rotate(45deg);}
+.menu-btn[aria-expanded="true"] .bars i:nth-child(2){opacity:0;}
+.menu-btn[aria-expanded="true"] .bars i:nth-child(3){transform:translateY(-5.25px) rotate(-45deg);}
+
+/* ============================================================
+   MENU OVERLAY
+   ============================================================ */
+.menu{
+  position:fixed;
+  top:var(--bar-h);left:0;right:0;bottom:0;
+  z-index:40;
+  background:var(--night);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:2.4rem var(--pad) 4rem;
+}
+.menu::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 80% 0%, rgba(198,64,31,0.18), transparent 62%);
+}
+.menu[hidden]{display:none;}
+.js-menu .menu{
+  display:block;
+  opacity:0;visibility:hidden;
+  transform:translateY(-10px);
+  transition:opacity .26s ease, transform .3s cubic-bezier(.22,.61,.36,1), visibility .26s;
+}
+.js-menu .menu.open{opacity:1;visibility:visible;transform:none;}
+
+.menu-inner{position:relative;z-index:1;max-width:880px;}
+.menu-eyebrow{
+  font-family:var(--mono);
+  font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-dim);
+  margin-bottom:1.6rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.menu-eyebrow::after{content:"";flex:1;height:1px;background:var(--line);}
+
+.menu-list{list-style:none;}
+.menu-list > li{border-bottom:1px solid var(--line);}
+.menu-link{
+  display:flex;align-items:baseline;gap:1rem;
+  padding:1.05rem 0;
+  text-decoration:none;
+  transition:padding-left .22s ease;
+}
+.menu-link:hover{padding-left:.5rem;}
+.menu-link .n{
+  position:relative;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+  color:var(--torii);
+  flex:0 0 2.4em;
+  white-space:nowrap;
+}
+.menu-link .t{
+  font-family:var(--serif);font-weight:700;
+  font-size:1.35rem;color:var(--paper);
+  line-height:1.3;
+}
+.menu-link .d{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;
+  color:var(--ink-dim);
+  margin-left:auto;
+  padding-left:1rem;
+  white-space:nowrap;
+}
+.menu-link[aria-current="page"] .t{color:var(--torii);}
+/* 현재 페이지 표식은 왼쪽 여백에 띄워 레이아웃을 밀지 않는다 */
+.menu-link[aria-current="page"] .n::before{
+  content:"▸";
+  position:absolute;left:-.95em;top:0;
+  color:var(--torii);
+}
+
+/* 메뉴 안 일차 목록 */
+.menu-days{list-style:none;padding:0 0 1.1rem 3.4em;}
+.menu-days li + li{margin-top:.1rem;}
+.menu-days a{
+  display:flex;align-items:baseline;gap:.8rem;
+  padding:.42rem 0;
+  text-decoration:none;
+  font-size:.9rem;color:#C8C4B6;
+  transition:color .2s ease, padding-left .2s ease;
+}
+.menu-days a:hover{color:var(--gold);padding-left:.35rem;}
+.menu-days a[aria-current="page"]{color:var(--torii);}
+.menu-days .dn{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);flex:0 0 3.6em;letter-spacing:.08em;}
+
+/* ============================================================
+   HERO (홈)
+   ============================================================ */
+.hero{
+  position:relative;
+  min-height:calc(100vh - var(--bar-h));
+  min-height:calc(100svh - var(--bar-h));
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:8vh var(--pad);
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 45% at 85% 15%, rgba(198,64,31,0.28), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(227,168,87,0.14), transparent 60%);
+  z-index:0;
+}
+.board{
+  position:relative;z-index:2;
+  color:var(--ink-dim);
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  display:flex;gap:1.2em;align-items:center;
+  margin-bottom:2.4rem;
+}
+.board .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1.8s infinite;}
+@keyframes blink{0%,60%{opacity:1;}80%{opacity:.15;}100%{opacity:1;}}
+
+.hero h1{
+  position:relative;z-index:2;
+  font-family:var(--serif);
+  font-weight:800;
+  font-size:clamp(2.6rem,7vw,5.2rem);
+  line-height:1.06;
+  letter-spacing:.01em;
+}
+.hero h1 .accent{color:var(--torii);}
+.hero .sub{
+  position:relative;z-index:2;
+  margin-top:1.6rem;
+  font-size:clamp(1rem,1.6vw,1.15rem);
+  color:var(--paper-dim);
+  max-width:38em;
+  line-height:1.8;
+}
+.hero .route{
+  position:relative;z-index:2;
+  margin-top:3rem;
+  display:flex;align-items:center;gap:1rem;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:.85rem;
+  color:var(--ink-dim);
+}
+.route .stop{color:var(--paper);font-weight:700;letter-spacing:.05em;}
+.route .track{flex:0 0 40px;height:1px;background:var(--line);position:relative;}
+.route .track::after{
+  content:"";position:absolute;top:50%;left:0;width:100%;height:1px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 4px, transparent 4px 8px);
+  transform:translateY(-50%);
+}
+
+.hero-meta{
+  position:relative;z-index:2;
+  margin-top:4.5rem;
+  display:flex;flex-wrap:wrap;gap:2.4rem;
+  border-top:1px solid var(--line);
+  padding-top:1.6rem;
+}
+.hero-meta div{display:flex;flex-direction:column;gap:.35rem;}
+.hero-meta .label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);}
+.hero-meta .val{font-family:var(--mono);font-size:1rem;color:var(--paper);}
+
+.hero-scroll{
+  position:relative;z-index:2;
+  margin-top:3rem;
+  font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-dim);
+  display:flex;align-items:center;gap:.6rem;
+}
+.hero-scroll .arrow{color:var(--torii);animation:nudge 2s infinite;}
+@keyframes nudge{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+
+/* ============================================================
+   PAGE HERO (하위 페이지)
+   ============================================================ */
+.page-hero{
+  position:relative;
+  padding:4.5rem var(--pad) 2.6rem;
+  overflow:hidden;
+}
+.page-hero::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 55% 70% at 88% 0%, rgba(198,64,31,0.2), transparent 62%);
+}
+.page-hero > *{position:relative;z-index:1;}
+.crumb{
+  font-family:var(--mono);
+  font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-dim);
+  display:flex;align-items:center;gap:.6rem;
+  margin-bottom:1.4rem;
+}
+.crumb a{color:var(--ink-dim);text-decoration:none;transition:color .2s ease;}
+.crumb a:hover{color:var(--gold);}
+.crumb .sep{color:var(--torii);}
+.crumb .cur{color:var(--paper);}
+.page-hero h1{
+  font-family:var(--serif);font-weight:800;
+  font-size:clamp(2rem,5vw,3.2rem);
+  line-height:1.15;
+  color:var(--paper);
+}
+.page-hero h1 .accent{color:var(--torii);}
+.page-hero .lead{
+  margin-top:1.1rem;
+  font-size:clamp(.94rem,1.4vw,1.05rem);
+  color:var(--paper-dim);
+  max-width:40em;
+  line-height:1.8;
+}
+.page-hero .facts{
+  margin-top:2rem;
+  display:flex;flex-wrap:wrap;gap:1.6rem 2.4rem;
+  border-top:1px solid var(--line);
+  padding-top:1.4rem;
+}
+.page-hero .facts div{display:flex;flex-direction:column;gap:.3rem;}
+.page-hero .facts .label{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);}
+.page-hero .facts .val{font-family:var(--mono);font-size:.94rem;color:var(--paper);}
+
+/* ============================================================
+   SECTION LABELS
+   ============================================================ */
+.section-head{
+  padding:3.4rem var(--pad) 1.8rem;
+  display:flex;align-items:baseline;gap:1.2rem;
+}
+.section-head .num{font-family:var(--mono);color:var(--torii);font-size:.85rem;}
+.section-head h2{
+  font-family:var(--serif);font-weight:700;
+  font-size:clamp(1.4rem,3vw,2rem);
+  color:var(--paper);
+}
+.section-head .line{flex:1;height:1px;background:var(--line);}
+
+/* ============================================================
+   HOME — 섹션 카드
+   ============================================================ */
+.nav-grid{
+  padding:0 var(--pad) 5rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.2rem;
+}
+.nav-card{
+  position:relative;
+  display:flex;flex-direction:column;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:1.7rem;
+  text-decoration:none;
+  overflow:hidden;
+  transition:border-color .25s ease, transform .25s ease;
+}
+.nav-card:hover{border-color:var(--torii);transform:translateY(-3px);}
+.nav-card::after{
+  content:"→";
+  position:absolute;right:1.4rem;bottom:1.4rem;
+  font-family:var(--mono);
+  color:var(--torii);
+  opacity:.5;
+  transition:transform .25s ease, opacity .25s ease;
+}
+.nav-card:hover::after{transform:translateX(4px);opacity:1;}
+.nav-card .n{
+  font-family:var(--mono);
+  font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:.8rem;
+}
+.nav-card h3{
+  font-family:var(--serif);font-weight:700;
+  font-size:1.3rem;color:var(--paper);
+  margin-bottom:.6rem;
+}
+.nav-card p{
+  font-size:.86rem;line-height:1.7;color:#C8C4B6;
+  padding-right:2rem;
+}
+
+/* ============================================================
+   ITINERARY INDEX — 일차 카드
+   ============================================================ */
+.day-grid{
+  padding:0 var(--pad) 5rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.2rem;
+}
+.day-card{
+  position:relative;
+  display:flex;flex-direction:column;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  text-decoration:none;
+  overflow:hidden;
+  transition:border-color .25s ease, transform .25s ease;
+}
+.day-card:hover{border-color:var(--torii);transform:translateY(-3px);}
+.day-card .dc-top{
+  position:relative;
+  padding:1.5rem 1.6rem 1.1rem;
+  border-bottom:1px dashed var(--line);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;
+}
+.day-card .dc-top::before, .day-card .dc-top::after{
+  content:"";position:absolute;bottom:-10px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--night);
+}
+.day-card .dc-top::before{left:-11px;}
+.day-card .dc-top::after{right:-11px;}
+.day-card .dc-n{
+  font-family:var(--mono);font-weight:700;
+  font-size:1.5rem;color:var(--torii);
+  line-height:1;
+}
+.day-card .dc-date{
+  font-family:var(--mono);
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);
+  text-align:right;
+}
+.day-card .dc-badge{
+  display:block;margin-top:.4rem;
+  font-size:.62rem;letter-spacing:.1em;
+  color:var(--torii);
+  border:1px solid var(--torii-deep);
+  padding:.22rem .55rem;border-radius:100px;
+}
+.day-card .dc-body{padding:1.3rem 1.6rem 1.6rem;}
+.day-card h3{
+  font-family:var(--serif);font-weight:700;
+  font-size:1.25rem;color:var(--paper);
+  margin-bottom:.7rem;
+}
+.day-card .dc-spots{
+  list-style:none;
+  display:flex;flex-wrap:wrap;gap:.4rem;
+}
+.day-card .dc-spots li{
+  font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.03em;
+  color:#9AA0B8;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--line);
+  padding:.28rem .6rem;
+  border-radius:6px;
+}
+
+/* ============================================================
+   TIMELINE / TICKET
+   ============================================================ */
+.timeline{
+  position:relative;
+  padding:1rem var(--pad) 4rem;
+}
+.day{
+  position:relative;
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:1.6rem;
+  margin-bottom:2.6rem;
+}
+.day .stopmark{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:.4rem;
+}
+.stopmark .ring{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--night-2);
+  border:2px solid var(--torii);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);
+  font-weight:700;font-size:1.1rem;
+  color:var(--paper);
+  box-shadow:0 0 0 6px var(--night);
+  flex-shrink:0;
+}
+
+.ticket{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  position:relative;
+  overflow:hidden;
+  transition:transform .25s ease, border-color .25s ease;
+}
+.ticket:hover{border-color:var(--torii);}
+.ticket-top{
+  position:relative;
+  padding:1.6rem 1.8rem 1.2rem;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:1rem;
+  border-bottom:1px dashed var(--line);
+}
+/* 티켓 절취선 좌우 반원 노치 */
+.ticket-top::before, .ticket-top::after{
+  content:"";position:absolute;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--night);
+  bottom:-10px;
+}
+.ticket-top::before{left:-11px;}
+.ticket-top::after{right:-11px;}
+.ticket-date{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;}
+.ticket-title{
+  font-family:var(--serif);font-weight:700;
+  font-size:1.5rem;color:var(--paper);margin-top:.3rem;
+}
+.ticket-badge{
+  font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.1em;
+  color:var(--torii);
+  border:1px solid var(--torii-deep);
+  padding:.35rem .7rem;border-radius:100px;
+  white-space:nowrap;
+  text-transform:uppercase;
+}
+
+.ticket-body{padding:1.6rem 1.8rem 1.8rem;}
+.stop-row{
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:1rem;
+  padding:.65rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.stop-row:last-child{border-bottom:none;}
+.stop-time{
+  font-family:var(--mono);
+  font-size:.78rem;color:var(--ink-dim);
+  padding-top:.15rem;
+}
+.stop-text b{color:var(--paper);font-weight:500;}
+.stop-text{font-size:.92rem;line-height:1.65;color:#C8C4B6;}
+.tip{
+  margin-top:1.1rem;
+  font-size:.82rem;
+  color:var(--gold);
+  background:rgba(227,168,87,0.08);
+  border-left:2px solid var(--gold);
+  padding:.6rem .9rem;
+  line-height:1.6;
+  border-radius:0 6px 6px 0;
+}
+
+/* ---------- MOVE (transit segment) ---------- */
+.move{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  padding:.55rem 0 .55rem 64px;
+  font-family:var(--mono);
+  font-size:.76rem;
+  color:#9AA0B8;
+}
+.move .icon{flex:0 0 auto;color:var(--torii);font-size:.9rem;}
+.move .move-line{color:var(--paper-dim);}
+.move .move-fare{margin-left:auto;color:var(--ink-dim);white-space:nowrap;}
+
+/* ============================================================
+   PAGER (이전/다음 일차)
+   ============================================================ */
+.pager{
+  margin:0 var(--pad) 5rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+}
+.pager-link{
+  display:flex;flex-direction:column;gap:.4rem;
+  background:var(--night-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:1.1rem 1.3rem;
+  text-decoration:none;
+  transition:border-color .22s ease, background .22s ease;
+}
+.pager-link:hover{border-color:var(--torii);background:var(--card);}
+.pager-link .dir{
+  font-family:var(--mono);
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--torii);
+}
+.pager-link .ttl{font-family:var(--serif);font-weight:700;font-size:1rem;color:var(--paper);}
+.pager-link.next{text-align:right;align-items:flex-end;}
+
+/* ============================================================
+   INFO GRID
+   ============================================================ */
+.info-grid{
+  padding:0 var(--pad) 5rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.2rem;
+}
+@media (max-width:760px){ .info-grid{grid-template-columns:1fr;} }
+
+.info-card{
+  background:var(--night-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:1.8rem;
+}
+.info-card h3{
+  font-family:var(--serif);
+  color:var(--torii);
+  font-size:1.05rem;
+  margin-bottom:1rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.info-card h3::before{content:"";width:14px;height:1px;background:var(--torii);}
+.info-card ul{list-style:none;display:flex;flex-direction:column;gap:.7rem;}
+.info-card li{
+  font-size:.87rem;line-height:1.7;color:#C8C4B6;
+  padding-left:1.1rem;position:relative;
+}
+.info-card li::before{
+  content:"";position:absolute;left:0;top:.6em;
+  width:5px;height:5px;background:var(--gold);border-radius:50%;
+}
+.info-card li b{color:var(--paper);}
+
+/* ---------- MAP LINKS ---------- */
+.maplink{
+  color:inherit;
+  text-decoration:none;
+  border-bottom:1px dotted var(--gold);
+  transition:color .2s ease, border-color .2s ease;
+}
+.maplink:hover{color:var(--gold);border-color:transparent;}
+.maplink::after{content:" ↗";font-size:.75em;color:var(--torii);}
+.hotel-actions{margin-top:1.1rem;}
+.btn-map{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--mono);
+  font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--paper);
+  background:rgba(198,64,31,0.15);
+  border:1px solid var(--torii-deep);
+  padding:.55rem 1rem;border-radius:8px;
+  text-decoration:none;
+  transition:background .2s ease;
+}
+.btn-map:hover{background:rgba(198,64,31,0.3);}
+
+/* ============================================================
+   TRANSIT
+   ============================================================ */
+.transit{
+  padding:0 var(--pad) 2rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.2rem;
+}
+@media (max-width:900px){ .transit{grid-template-columns:1fr;} }
+.pass-card{
+  background:var(--night-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:1.6rem;
+  display:flex;flex-direction:column;gap:.7rem;
+}
+.pass-card .pass-name{font-family:var(--serif);font-size:1.15rem;color:var(--paper);}
+.pass-card .pass-price{font-family:var(--mono);color:var(--gold);font-size:.85rem;}
+.pass-card p{font-size:.85rem;color:#C8C4B6;line-height:1.65;}
+
+.transit-plan{
+  margin:0 var(--pad) 5rem;
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.transit-plan table{width:100%;min-width:520px;border-collapse:collapse;font-size:.86rem;}
+.transit-plan th{
+  text-align:left;
+  font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);
+  background:var(--night-2);
+  padding:.9rem 1.2rem;
+}
+.transit-plan td{
+  padding:.9rem 1.2rem;
+  border-top:1px solid var(--line);
+  color:#C8C4B6;
+}
+.transit-plan td:first-child, .transit-plan th:first-child{color:var(--paper);font-weight:600;}
+.transit-plan tr td:nth-child(2){color:var(--torii);font-family:var(--mono);}
+
+/* ============================================================
+   HOTEL
+   ============================================================ */
+.hotel{
+  margin:0 var(--pad) 3rem;
+  background:linear-gradient(135deg, var(--card), var(--night-2));
+  border:1px solid var(--torii-deep);
+  border-radius:16px;
+  padding:2.4rem;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:1.5rem;
+  align-items:center;
+}
+@media (max-width:640px){ .hotel{grid-template-columns:1fr;} }
+.hotel .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem;}
+.hotel h3{font-family:var(--serif);font-size:1.6rem;color:var(--paper);margin-bottom:.5rem;}
+.hotel p{font-size:.88rem;color:var(--paper-dim);line-height:1.7;}
+.hotel .rating{
+  font-family:var(--mono);
+  text-align:center;
+  border-left:1px solid var(--line);
+  padding-left:1.6rem;
+}
+.hotel .rating .num{font-size:2.4rem;color:var(--torii);font-weight:700;}
+.hotel .rating .cap{font-size:.68rem;color:var(--ink-dim);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem;}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  padding:2.6rem var(--pad) 3.4rem;
+  border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+  font-family:var(--mono);
+  font-size:.72rem;
+  color:var(--ink-dim);
+  letter-spacing:.05em;
+}
+footer a{color:var(--ink-dim);text-decoration:none;border-bottom:1px dotted var(--line);transition:color .2s ease;}
+footer a:hover{color:var(--gold);}
+
+/* ============================================================
+   SCROLL REVEAL
+   숨김은 .pre 가 붙은 요소에만 적용한다. .pre 는 JS가 "첫 화면
+   밖에 있는" 요소에만 직접 달아주므로, 스크립트가 죽든 옵저버가
+   안 돌든 처음 보이는 콘텐츠가 사라지는 일은 없다.
+   등장은 transition 이 아니라 fill-mode 를 가진 animation 이라
+   중간에 멈춰서 투명하게 남지 않는다.
+   ============================================================ */
+.reveal.pre{opacity:0;}
+.reveal.pre.in{animation:rise .6s cubic-bezier(.22,.61,.36,1) both;}
+@keyframes rise{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:none;}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .reveal.pre{opacity:1;}
+  .reveal.pre.in{animation:none;}
+  .board .dot, .hero-scroll .arrow{animation:none;}
+  .js-menu .menu{transition:none;}
+}
+
+/* ============================================================
+   MOBILE (≤640px)
+   ============================================================ */
+@media (max-width:640px){
+  :root{--pad:6vw;--bar-h:56px;}
+
+  .brand-text{font-size:.94rem;}
+  .brand-sub{display:none;}
+  .menu{padding-top:1.8rem;}
+  .menu-link .t{font-size:1.15rem;}
+  .menu-link .d{display:none;}
+  .menu-days{padding-left:3.4em;}
+
+  .hero{padding:6vh var(--pad);}
+  .board{font-size:.62rem;gap:.8em;margin-bottom:1.8rem;}
+  .hero h1{font-size:clamp(2.2rem,10vw,3rem);}
+  .hero .sub{font-size:.92rem;line-height:1.75;margin-top:1.2rem;}
+  .hero .route{margin-top:2.2rem;font-size:.78rem;gap:.6rem;}
+  .hero-meta{margin-top:2.6rem;gap:1.4rem 2rem;padding-top:1.2rem;}
+  .hero-meta .val{font-size:.9rem;}
+  .hero-scroll{margin-top:2rem;}
+
+  .page-hero{padding:2.6rem var(--pad) 1.8rem;}
+  .page-hero .facts{margin-top:1.5rem;gap:1.1rem 1.8rem;}
+  .page-hero .facts .val{font-size:.86rem;}
+
+  .section-head{padding:2.4rem var(--pad) 1.2rem;gap:.8rem;}
+  .section-head h2{font-size:1.25rem;}
+  .section-head .num{font-size:.68rem;}
+
+  .nav-grid, .day-grid{padding-bottom:3rem;}
+  .nav-card, .day-card .dc-body{padding:1.3rem;}
+  .nav-card h3{font-size:1.15rem;}
+
+  .timeline{padding:.5rem var(--pad) 2.6rem;}
+  .day{grid-template-columns:44px 1fr;gap:1rem;margin-bottom:1.8rem;}
+  .stopmark .ring{width:44px;height:44px;font-size:.92rem;box-shadow:0 0 0 5px var(--night);}
+
+  .ticket{border-radius:12px;}
+  .ticket-top{padding:1.2rem 1.2rem 1rem;}
+  .ticket-title{font-size:1.22rem;}
+  .ticket-badge{font-size:.62rem;padding:.3rem .6rem;}
+  .ticket-body{padding:1.2rem 1.2rem 1.4rem;}
+
+  .stop-row{grid-template-columns:52px 1fr;gap:.7rem;padding:.55rem 0;}
+  .stop-time{font-size:.7rem;}
+  .stop-text{font-size:.88rem;line-height:1.6;}
+  .tip{font-size:.78rem;padding:.55rem .8rem;margin-top:.9rem;}
+
+  .move{padding-left:0;flex-wrap:wrap;font-size:.72rem;gap:.5rem;padding-top:.45rem;padding-bottom:.45rem;}
+  .move .move-fare{margin-left:0;width:100%;padding-left:1.6rem;}
+
+  .pager{grid-template-columns:1fr;margin-bottom:3rem;}
+
+  .hotel{padding:1.6rem;border-radius:14px;gap:1.2rem;}
+  .hotel h3{font-size:1.25rem;}
+  .hotel p{font-size:.84rem;}
+  .hotel .rating{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:1.1rem;text-align:left;display:flex;align-items:baseline;gap:.6rem;}
+  .hotel .rating .num{font-size:1.7rem;}
+  .btn-map{width:100%;justify-content:center;padding:.7rem 1rem;}
+
+  .pass-card{padding:1.3rem;}
+  .pass-card .pass-name{font-size:1.05rem;}
+  .pass-card .pass-price{font-size:.78rem;}
+  .pass-card p{font-size:.82rem;}
+
+  .transit-plan table{font-size:.8rem;}
+  .transit-plan th, .transit-plan td{padding:.7rem .9rem;}
+
+  .info-card{padding:1.3rem;}
+  .info-card li{font-size:.84rem;}
+
+  footer{padding:2rem var(--pad) 3rem;flex-direction:column;gap:.6rem;font-size:.66rem;}
+
+  /* 링크·버튼 최소 탭 영역 확보 */
+  .maplink{display:inline-block;padding:.1rem 0;}
+}
+
+@media (max-width:360px){
+  .hero h1{font-size:1.9rem;}
+  .stop-row{grid-template-columns:44px 1fr;}
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print{
+  body{background:#fff;color:#111;padding-top:0;}
+  .grain, .topbar, .menu, .hero::before, .page-hero::before, .pager, .hero-scroll{display:none;}
+  .hero{min-height:auto;padding:2rem;}
+  .hero h1, .hero .sub, .page-hero h1, .page-hero .lead,
+  .section-head h2, .ticket-title, .hotel h3{color:#111;}
+  .ticket, .info-card, .pass-card, .hotel, .nav-card, .day-card{background:#fff;border:1px solid #bbb;break-inside:avoid;}
+  .stop-text, .info-card li, .pass-card p, .hotel p{color:#333;}
+  .stopmark .ring{box-shadow:none;background:#fff;color:#111;}
+  .js-reveal .reveal{opacity:1;transform:none;}
+}
