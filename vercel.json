@@ -2,15 +2,17 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
+      "comment": "폰트 파일명에 해시가 없다. immutable 을 걸면 서브셋을 다시 만들어도 브라우저가 1년 동안 옛 파일을 쓴다. 하루만 재사용하고 그 뒤엔 확인하게 둔다.",
       "source": "/assets/fonts/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]
     },
     {
+      "comment": "CSS·JS 는 매번 검증한다. 안 바뀌었으면 304 라 사실상 공짜고, 바뀌면 즉시 반영된다.",
       "source": "/assets/(.*)\\.(css|js)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, no-cache" }
       ]
     }
   ]
