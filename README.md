@@ -1,0 +1,1 @@
+# osaka_kyoto_2026
