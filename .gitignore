@@ -3,3 +3,7 @@
 .claude/
 node_modules/
 *.log
+
+# 폰트 서브셋 재생성용 (tools/subset-font.py)
+.venv/
+tools/.PretendardVariable.woff2
