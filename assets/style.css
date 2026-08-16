@@ -805,6 +805,9 @@ footer a:hover{color:var(--gold);}
   .menu-link .t{font-size:1.15rem;}
   .menu-link .d{display:none;}
   .menu-days{padding-left:3.4em;}
+  /* 손가락으로 누르는 화면에서는 일차 링크가 30px 밖에 안 돼 서로 붙어
+     있었다. 날짜 이동이 이 사이트의 주 동선이라 44px 로 넓힌다. */
+  .menu-days a{padding:.7rem 0;min-height:44px;align-items:center;}
 
   .hero{padding:2.6rem var(--pad) 2.4rem;}
   .board{font-size:.62rem;gap:.8em;margin-bottom:1.8rem;}
