@@ -720,6 +720,14 @@ a:focus-visible, button:focus-visible{outline:2px solid var(--gold);outline-offs
 }
 .transit-plan td:first-child, .transit-plan th:first-child{color:var(--paper);font-weight:600;}
 .transit-plan tr td:nth-child(2){color:var(--torii);font-family:var(--mono);}
+/* 바로 아래 .note-block 이 붙는 표는 간격을 좁힌다 */
+.transit-plan.tight{margin-bottom:1.2rem;}
+
+/* 타임라인 밖에서 .tip 을 쓸 때 감싸는 상자.
+   .day 는 56px 마커 + 본문 2열 그리드라 마커 없이 .ticket 만 쓰면
+   본문이 56px 열에 갇힌다. 표 밑 설명은 이걸 쓸 것. */
+.note-block{margin:0 var(--pad) 5rem;}
+.note-block .tip:first-child{margin-top:0;}
 
 /* ============================================================
    HOTEL
