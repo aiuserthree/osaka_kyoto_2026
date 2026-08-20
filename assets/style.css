@@ -723,6 +723,15 @@ a:focus-visible, button:focus-visible{outline:2px solid var(--gold);outline-offs
 }
 .transit-plan td:first-child, .transit-plan th:first-child{color:var(--paper);font-weight:600;}
 .transit-plan tr td:nth-child(2){color:var(--torii);font-family:var(--mono);}
+
+/* 실시간 환율 표시 옆에 붙는 갱신 시점 (assets/fx.js) */
+.facts .fx-note{
+  display:block;
+  font-family:var(--mono);
+  font-size:.62rem;letter-spacing:.06em;
+  color:var(--ink-dim);
+  margin-top:.3rem;
+}
 /* 바로 아래 .note-block 이 붙는 표는 간격을 좁힌다 */
 .transit-plan.tight{margin-bottom:1.2rem;}
 

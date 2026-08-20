@@ -82,7 +82,7 @@
   <div class="facts">
     <div><span class="label">1인 총계</span><span class="val">약 69만원</span></div>
     <div><span class="label">기준</span><span class="val">1인 1실 · 인천 출발</span></div>
-    <div><span class="label">환율</span><span class="val">100엔 = 890원</span></div>
+    <div><span class="label">환율</span><span class="val" data-fx-rate>100엔 = 890원</span><span class="fx-note" data-fx-note>기준 환율</span></div>
   </div>
 </section>
 
@@ -100,14 +100,14 @@
     <tbody>
       <tr><td>항공권 (인천↔간사이 왕복)</td><td>205,000원</td><td><b>실측</b> — 9/6~9/9 조회 최저 192,000원(티웨이 직항)에 수하물 여유를 얹음</td></tr>
       <tr><td>숙소 (3박, 1인 1실)</td><td>170,424원</td><td><b>실측</b> — 9/6~9/9 투숙객 1명 조회, 1박 56,808원 x 3박</td></tr>
-      <tr><td>현지 비용 (35,600엔)</td><td>316,840원</td><td>교통·입장료·식비·기타. 아래 상세</td></tr>
-      <tr><td><b>합계</b></td><td><b>692,264원</b></td><td>쇼핑·조식 제외. 두 명이 각자 방을 쓰면 1,384,528원</td></tr>
+      <tr><td>현지 비용 (35,600엔)</td><td data-jpy="35600">316,840원</td><td>교통·입장료·식비·기타. 아래 상세</td></tr>
+      <tr><td><b>합계</b></td><td><b data-jpy="35600" data-krw-base="375424">692,264원</b></td><td>쇼핑·조식 제외. 두 명이 각자 방을 쓰면 <span data-jpy="71200" data-krw-base="750848">1,384,528원</span></td></tr>
     </tbody>
   </table>
 </div>
 
 <div class="note-block reveal">
-  <p class="tip">항공권을 실제로 조회했습니다 — <b>티웨이 192,000 · 에어부산 195,100 · 에어서울 203,100 · 아시아나(김포) 230,000원</b>(1인 왕복, 세금·수수료 포함). 전 구간 직항 2시간 안팎이에요. 최저가로 잡으면 1인 <b>679,264원</b>, 김포·대형사면 <b>717,264원</b>입니다. 다만 <b>LCC는 위탁수하물이 별도</b>라 돈키호테에서 짐이 늘 걸 감안해 기준값에 여유를 얹었습니다.</p>
+  <p class="tip">항공권을 실제로 조회했습니다 — <b>티웨이 192,000 · 에어부산 195,100 · 에어서울 203,100 · 아시아나(김포) 230,000원</b>(1인 왕복, 세금·수수료 포함). 전 구간 직항 2시간 안팎이에요. 최저가로 잡으면 1인 <b data-jpy="35600" data-krw-base="362424">679,264원</b>, 김포·대형사면 <b data-jpy="35600" data-krw-base="400424">717,264원</b>입니다. 다만 <b>LCC는 위탁수하물이 별도</b>라 돈키호테에서 짐이 늘 걸 감안해 기준값에 여유를 얹었습니다.</p>
 </div>
 
 <div class="section-head">
@@ -126,7 +126,7 @@
       <tr><td>입장료</td><td>5,300엔</td><td>가이유칸 2,700(A구간) · 아베노 하루카스 2,000 · 에비스타워 관람차 600</td></tr>
       <tr><td>식비</td><td>15,800엔</td><td>1일차 4,000 · 2일차 4,300 · 3일차 4,000 · 4일차 1,500 · 여유 2,000 (조식 제외)</td></tr>
       <tr><td>기타</td><td>6,700엔</td><td>cocone 마사지 6,000 · 4일차 코인로커 700 (호텔 무료 보관이면 0)</td></tr>
-      <tr><td><b>합계</b></td><td><b>35,600엔</b></td><td>316,840원</td></tr>
+      <tr><td><b>합계</b></td><td><b>35,600엔</b></td><td data-jpy="35600">316,840원</td></tr>
     </tbody>
   </table>
 </div>
@@ -223,7 +223,7 @@
   <div class="info-card reveal">
     <h3>흔들리는 것</h3>
     <ul>
-      <li><b>환율</b> — 100엔 890원 기준. 950원이 되면 현지 비용이 약 21,600원 늘어납니다</li>
+      <li><b>환율</b> — <b data-fx-rate>100엔 = 890원</b>을 실시간으로 받아와 원화 금액을 다시 계산합니다. 엔화 금액(교통·입장료·식비)은 고정이고 환산값만 움직여요. 조회에 실패하면 기준 환율 890원으로 표시됩니다</li>
       <li><b>가이유칸 구간</b> — 9/8은 화요일 비수기 평일이라 A(2,700엔)로 잡았습니다. B가 되면 1인 1,780원 늘어요. 공식 요금 캘린더에서 날짜별로 확인하세요</li>
     </ul>
   </div>
@@ -235,5 +235,6 @@
 </footer>
 
 <script src="assets/nav.js"></script>
+<script src="assets/fx.js"></script>
 </body>
 </html>
