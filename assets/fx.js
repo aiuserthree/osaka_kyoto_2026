@@ -5,8 +5,9 @@
  *
  * 환율만 갱신하고 원화 금액을 그대로 두면 페이지 안에서 숫자가 어긋나므로,
  * 엔화에서 환산된 값은 전부 data-jpy 로 표시해 두고 함께 다시 계산한다.
- *   data-jpy       이 요소가 나타내는 엔화 금액
- *   data-krw-base  엔화와 무관한 고정 원화(항공권·숙소)를 더할 때 쓴다
+ *   data-jpy        이 요소가 나타내는 엔화 금액
+ *   data-krw-base   엔화와 무관한 고정 원화(항공권·숙소)를 더할 때 쓴다
+ *   data-krw-round  '약 65만원' 처럼 만원 단위로 굴려 보여준다(히어로 요약용)
  *
  * 못 받아오면 HTML 에 박아둔 기준 환율(890원)을 그대로 둔다. 숫자가
  * 사라지는 것보다 조금 낡은 값이 낫다.
@@ -14,11 +15,13 @@
 (function () {
   var API = 'https://open.er-api.com/v6/latest/JPY';
   var won = function (n) { return Math.round(n).toLocaleString('ko-KR') + '원'; };
+  var man = function (n) { return '약 ' + Math.round(n / 10000) + '만원'; };
 
   function paint(rate, when) {
     document.querySelectorAll('[data-jpy]').forEach(function (el) {
       var base = Number(el.getAttribute('data-krw-base') || 0);
-      el.textContent = won(base + Number(el.getAttribute('data-jpy')) * rate);
+      var krw = base + Number(el.getAttribute('data-jpy')) * rate;
+      el.textContent = el.hasAttribute('data-krw-round') ? man(krw) : won(krw);
     });
     document.querySelectorAll('[data-fx-rate]').forEach(function (el) {
       /* 반올림해 보여주면 표의 환산값을 독자가 되짚어 계산할 때 어긋난다.
